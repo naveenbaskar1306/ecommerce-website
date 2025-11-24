@@ -7,7 +7,7 @@ const Button = () => {
       <div className="content">
         <div className="benefits">
           <div className="basic-marquee basic-marquee-1">
-            <a className="social-media-link" href="#">
+            <a className="social-media-link" href="">
               <button className="button">
                 <svg viewBox="0 0 122.88 122.88" data-name="Layer 1" id="Layer_1" xmlns="http://www.w3.org/2000/svg">
                   <path d="M25.2,0H97.68a25.27,25.27,0,0,1,25.2,25.2V97.68a25.27,25.27,0,0,1-25.2,25.2H25.2A25.27,25.27,0,0,1,0,97.68V25.2A25.27,25.27,0,0,1,25.2,0Z" className="cls-1" />
@@ -15,7 +15,7 @@ const Button = () => {
                 </svg>
               </button>
             </a>
-            <a className="social-media-link" href="#">
+            <a className="social-media-link" href="">
               <button className="button">
                 <svg viewBox="0 0 122.88 122.88" data-name="Layer 1" id="Layer_1" xmlns="http://www.w3.org/2000/svg">
                   <path d="M25.2,0H97.68a25.27,25.27,0,0,1,25.2,25.2V97.68a25.27,25.27,0,0,1-25.2,25.2H25.2A25.27,25.27,0,0,1,0,97.68V25.2A25.27,25.27,0,0,1,25.2,0Z" className="cls-3" />
@@ -24,7 +24,7 @@ const Button = () => {
                 </svg>
               </button>
             </a>
-            <a className="social-media-link" href="#">
+            <a className="social-media-link" href="">
               <button className="button">
                 <svg viewBox="0 0 132.004 132" xmlnsXlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
                   <defs>
@@ -48,7 +48,7 @@ const Button = () => {
                 </svg>
               </button>
             </a>
-            <a className="social-media-link" href="#">
+            <a className="social-media-link" href="">
               <button className="button">
                 <svg viewBox="0 0 512 512" data-name="Layer 1" id="Layer_1" xmlnsXlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
                   <defs>
@@ -62,7 +62,7 @@ const Button = () => {
                 </svg>
               </button>
             </a>
-            <a className="social-media-link" href="#">
+            <a className="social-media-link" href="">
               <button className="button">
                 <svg viewBox="0 0 122.88 122.31" data-name="Layer 1" id="Layer_1" xmlns="http://www.w3.org/2000/svg">
                   <path d="M27.75,0H95.13a27.83,27.83,0,0,1,27.75,27.75V94.57a27.83,27.83,0,0,1-27.75,27.74H27.75A27.83,27.83,0,0,1,0,94.57V27.75A27.83,27.83,0,0,1,27.75,0Z" className="cls-7" />
@@ -70,7 +70,7 @@ const Button = () => {
                 </svg>
               </button>
             </a>
-            <a className="social-media-link" href="#">
+            <a className="social-media-link" href="">
               <button className="button">
                 <svg viewBox="0 0 122.88 122.39" data-name="Layer 1" id="Layer_1" xmlns="http://www.w3.org/2000/svg">
                   <path d="M27.4,0H95.48a27.48,27.48,0,0,1,27.4,27.4V95a27.48,27.48,0,0,1-27.4,27.41H27.4A27.48,27.48,0,0,1,0,95V27.4A27.48,27.48,0,0,1,27.4,0Z" className="cls-1" />
@@ -79,7 +79,7 @@ const Button = () => {
                 </svg>
               </button>
             </a>
-            <a className="social-media-link" href="#">
+            <a className="social-media-link" href="">
               <button className="button">
                 <svg viewBox="0 0 512 512" clipRule="evenodd" fillRule="evenodd" imageRendering="optimizeQuality" textRendering="geometricPrecision" shapeRendering="geometricPrecision" xmlns="http://www.w3.org/2000/svg">
                   <defs>
