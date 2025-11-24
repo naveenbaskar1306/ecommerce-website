@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1",
+    "title": "Handmade Pottery Vase",
+    "price": 799,
+    "description": "Rustic terracotta vase crafted by local artisans.",
+    "category": "Home Decor",
+    "image": "https://example.com/images/vase.jpg"
+  },
+  {
+    "id": "2",
+    "title": "Woven Jute Bag",
+    "price": 499,
+    "description": "Eco-friendly handwoven jute carry bag.",
+    "category": "Accessories",
+    "image": "https://example.com/images/jute-bag.jpg"
+  },
+  {
+    "id": "3",
+    "title": "Bamboo Lamp Shade",
+    "price": 899,
+    "description": "Elegant handmade bamboo lamp shade for warm lighting.",
+    "category": "Lighting",
+    "image": "https://example.com/images/bamboo-lamp.jpg"
+  },
+  {
+    "id": "4",
+    "title": "Clay Tea Set",
+    "price": 1299,
+    "description": "Traditional clay tea set for an authentic experience.",
+    "category": "Kitchenware",
+    "image": "https://example.com/images/tea-set.jpg"
+  },
+  {
+    "id": "5",
+    "title": "Hand-Painted Wall Plate",
+    "price": 599,
+    "description": "Beautifully hand-painted ceramic wall plate.",
+    "category": "Wall Art",
+    "image": "https://example.com/images/wall-plate.jpg"
+  }
+]
