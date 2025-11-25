@@ -2285,6 +2285,51 @@ img {
 }
 
 
+/* Final mobile header alignment fix */
+@media (max-width: 768px) {
+  header.header .container {
+    padding: 8px 12px;
+  }
+
+  header.header .row {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+  }
+
+  /* make each header column full-width */
+  header.header .logowrapper,
+  header.header .part2,
+  header.header .part3 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+
+  /* location dropdown + search full-width */
+  .country-dropdown-root {
+    width: 100% !important;
+    min-width: 100% !important;
+    margin-bottom: 8px;
+  }
+
+  .headersearch {
+    width: 100% !important;
+    left: 0 !important;
+    margin-top: 4px;
+  }
+
+  /* cart/profile icons centered, no weird gaps */
+  header .part3 {
+    justify-content: center !important;
+    gap: 10px;
+  }
+}
+
+
 
 
 
