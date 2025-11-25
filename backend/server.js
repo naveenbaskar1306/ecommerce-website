@@ -14,11 +14,15 @@ app.use(express.json());
 app.use(cookieParser());
 
 // CORS: allow your frontend origin (default http://localhost:3000)
-const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || 'http://localhost:3000';
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://nichieecommerce.netlify.app/',
+];
 app.use(cors({
-  origin: FRONTEND_ORIGIN,
+  origin: allowedOrigins,
   credentials: true,
 }));
+
 
 
 
