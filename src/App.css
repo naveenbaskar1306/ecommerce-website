@@ -2719,3 +2719,272 @@ img {
     padding: 6px 10px;
   }
 }
+
+/* ------------------------
+   MOBILE LAYOUT FIXES (<= 768px)
+   Add this at the end of your main CSS (App.css)
+   ------------------------ */
+@media (max-width: 768px) {
+  /* page container padding */
+  .container, .site-wrapper, .page-wrapper {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    box-sizing: border-box;
+  }
+
+  /* Make header elements stack and wrap */
+  .header-container, .topbar, .header-top, .header-row {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px;
+    align-items: stretch;
+  }
+
+  .search-wrapper, .search-box, .header-search {
+    width: 100% !important;
+  }
+
+  .cart-user-icons, .header-actions {
+    justify-content: center !important;
+    gap: 10px;
+  }
+
+  .category-btn-wrapper, .categories-row {
+    width: 100%;
+    display:flex;
+    justify-content: center;
+    padding: 6px 0;
+  }
+
+  /* ---------------------------
+     Featured slider fixes
+     (prevents tall/sliced slides)
+     --------------------------- */
+  .featured-slider, .featured-slider .swiper, .slider-wrapper {
+    width: 100% !important;
+    box-sizing: border-box;
+    padding: 0 6px !important;
+  }
+
+  /* Force slides to be sensible width and height on mobile */
+  .swiper-slide, .featured-slider .swiper-slide {
+    width: 72% !important;        /* show one slide + part of next */
+    max-width: 280px !important;
+    display: flex !important;
+    align-items: flex-start;
+  }
+
+  /* Card container: make height auto and prevent overflow */
+  .product-card-slider, .card--slider, .slide-card {
+    height: auto !important;
+    min-height: 320px !important;
+    border-radius: 12px;
+    overflow: hidden !important;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+  }
+
+  /* Slider image: fixed visible height, cover */
+  .product-card-slider img,
+  .product-card-slider .card-image,
+  .swiper-slide img {
+    width: 100% !important;
+    height: 160px !important;
+    object-fit: cover !important;
+    display: block !important;
+  }
+
+  .product-card-slider .card-body,
+  .product-card .card-body {
+    padding: 12px !important;
+  }
+
+  /* pager dots spacing */
+  .swiper-pagination {
+    margin-top: 10px;
+  }
+
+  /* ---------------------------
+     Product listing grid
+     --------------------------- */
+  .product-grid, .products-grid, .cards-grid {
+    display: grid !important;
+    grid-template-columns: 1fr !important; /* 1 column on mobile */
+    gap: 16px !important;
+  }
+
+  .product-card, .card, .product-tile {
+    width: 100% !important;
+    margin: 0 auto !important;
+    box-sizing: border-box;
+  }
+
+  .product-card img, .product-tile img, .card img {
+    width: 100% !important;
+    height: 200px !important;
+    object-fit: cover !important;
+    display: block !important;
+    border-radius: 8px;
+  }
+
+  /* make the "No Image" placeholder same size as regular images */
+  .no-image, .placeholder-image {
+    width: 100% !important;
+    height: 200px !important;
+    display: block !important;
+    background-color: #f3f4f6;
+    border-radius: 8px;
+    object-fit: cover;
+  }
+
+  /* Product detail page image & info spacing */
+  .product-detail-container, .product-detail {
+    padding: 12px !important;
+  }
+
+  .product-detail-image, .product-gallery {
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .product-detail-image img, .product-gallery img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: cover !important;
+  }
+
+  /* Fix floating action button (AI) so it doesn't cover the card CTA */
+  .ai-fab, .floating-ai {
+    right: 14px !important;
+    bottom: 20px !important;
+  }
+
+  /* Footer stack */
+  footer, .site-footer {
+    text-align: center;
+    padding: 24px 12px !important;
+  }
+}
+
+/* small extra safety: prevent any element from overflowing viewport */
+html, body {
+  -webkit-text-size-adjust: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* --- FEATURED SLIDER FIX --- */
+
+.featured-slider .slick-slide {
+  display: flex !important;
+  justify-content: center;
+}
+
+.featured-slide {
+  padding: 10px;
+  display: flex !important;
+  justify-content: center;
+}
+
+.featured-card {
+  width: 95%;
+  max-width: 320px;
+  background: #fff;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+/* Image wrapper */
+.featured-media {
+  width: 100%;
+  height: 180px; /* FIXED height so mobile does not stretch */
+  overflow: hidden;
+  border-radius: 18px 18px 0 0;
+}
+
+/* Images stay aligned and cover */
+.featured-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* IMPORTANT FIX */
+  display: block;
+}
+
+/* Content area */
+.featured-body {
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 200px; /* Ensures alignment */
+}
+
+/* Product name */
+.featured-name {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  line-height: 1.3;
+}
+
+/* Description truncate */
+.featured-desc {
+  font-size: 13px;
+  color: #666;
+  margin-top: 6px;
+  height: 38px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; 
+  -webkit-box-orient: vertical;
+}
+
+/* Price + button row */
+.featured-footer {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.featured-price {
+  font-size: 15px;
+  font-weight: 700;
+  color: #3b2f2f;
+}
+
+/* Slick dots alignment fix */
+.slick-dots {
+  bottom: -30px !important;
+}
+
+.slick-dots li button:before {
+  font-size: 10px !important;
+}
+
+/* --- MOBILE RESPONSIVE FIX --- */
+@media (max-width: 560px) {
+  .featured-media {
+    height: 150px; /* slightly smaller on small screens */
+  }
+
+  .featured-card {
+    max-width: 280px;
+  }
+
+  .featured-body {
+    height: auto;
+  }
+
+  .featured-desc {
+    -webkit-line-clamp: 2;
+  }
+
+  .featured-title {
+    text-align: left;
+    padding-left: 10px;
+  }
+}

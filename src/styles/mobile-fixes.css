@@ -335,3 +335,216 @@
     height: 18px !important;
   }
 }
+/* ===========================
+   MOBILE HEADER + NAV PATCH
+   (Paste at the end of your CSS)
+   =========================== */
+
+/* Base - make header layout predictable */
+.headerwrapper,
+.header {
+  box-sizing: border-box;
+}
+
+/* Ensure logo area doesn't push everything off-screen */
+.header .logowrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+}
+
+/* Main header container stack order for mobile */
+@media (max-width: 992px) {
+  /* Stack major header sections for consistent flow */
+  .header .logowrapper,
+  .header .search-box-wrapper,
+  .header .navpart2,
+  .header .part3 {
+    width: 100% !important;
+    display: block !important;
+    box-sizing: border-box !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  /* Search area: full width, compact height */
+  .header .search-box-wrapper .headersearch,
+  .headersearch {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    padding: 8px 12px !important;
+    border-radius: 10px !important;
+    margin-bottom: 8px !important;
+  }
+  .headersearch input {
+    height: 40px !important;
+    padding: 0 12px !important;
+    font-size: 14px !important;
+  }
+
+  /* Put search first, icons second (natural flow) */
+  .header .search-box-wrapper { order: 1 !important; }
+  .header .part3 { order: 2 !important; margin-top: 6px !important; }
+
+  /* Icons (cart / profile) - small circular buttons */
+  .header .part3 {
+    display: flex !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+    align-items: center !important;
+  }
+  .header .part3 .circle,
+  .header .part3 .user,
+  .header .part3 .cart-button,
+  .header .part3 .profile-button {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    border-radius: 50% !important;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06) !important;
+    padding: 0 !important;
+    margin-left: 6px !important;
+  }
+  .header .part3 .profile-button > div {
+    width: 34px !important;
+    height: 34px !important;
+  }
+
+  /* Make sure any absolutely positioned icons are returned to normal flow */
+  .header .cart-btn,
+  .header .user-btn,
+  .header .cart-icon,
+  .header .user-icon {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+  }
+
+  /* Nav row (links) - wrap into multiple rows and become pill buttons */
+  .navpart2 {
+    width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 8px 6px !important;
+    box-sizing: border-box !important;
+  }
+
+  .navpart2 ul,
+  .navpart2 .list,
+  .navpart2 .list-inline {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 8px 10px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    list-style: none !important;
+    justify-content: flex-start !important;
+  }
+
+  .navpart2 li {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .navpart2 a,
+  .navpart2 .list-inline-item a {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+    background: #f6f6f6 !important;
+    border-radius: 18px !important;
+    border: 1px solid rgba(0,0,0,0.06) !important;
+    text-decoration: none !important;
+    color: #111 !important;
+    white-space: nowrap !important;
+  }
+
+  /* Make 'All Categories' button compact */
+  .allCatTab, .catwrapper, .catwrapper .allCatTab {
+    padding: 0.4rem 0.85rem !important;
+    font-size: 0.95rem !important;
+    white-space: nowrap !important;
+  }
+
+  /* Give header a little breathing room */
+  .headerwrapper { padding-bottom: 6px !important; }
+}
+
+/* Very small phones: reduce icon sizes and compact nav */
+@media (max-width: 420px) {
+  .header .part3 .circle,
+  .header .part3 .user,
+  .header .part3 .cart-button,
+  .header .part3 .profile-button {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+  }
+  .navpart2 a { padding: 6px 8px !important; font-size: 12px !important; }
+  .allCatTab { font-size: 0.92rem !important; padding: 0.35rem 0.6rem !important; }
+}
+
+/* ===========================
+   FEATURED SLIDER + PRODUCT GRID MOBILE FIXES
+   (prevents the very tall/very narrow cards seen on phones)
+   =========================== */
+
+/* Force featured slides to behave as normal cards on small screens.
+   This prevents the slider from creating tiny narrow columns and forcing
+   content to vertically compress into narrow strips. */
+@media (max-width: 768px) {
+  /* make the slider items use a sensible min-width so slick doesn't squeeze them */
+  .featured-slider .slick-slide,
+  .featured-slider .featured-slide {
+    min-width: 220px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* reduce media height, allow images to scale nicely */
+  .featured-media { flex: 0 0 140px !important; max-height: 160px !important; }
+  .featured-media img { object-fit: cover !important; height: 100% !important; width: 100% !important; display: block !important; }
+
+  /* make card body font-size slightly smaller so desc fits */
+  .featured-name { font-size: 0.98rem !important; }
+  .featured-desc { font-size: 0. ninerem; } /* fallback if typo-safe; browsers ignore invalid size */
+  .featured-desc { font-size: 0.92rem !important; }
+
+  /* If your slider dots overlap content, push them down slightly */
+  .featured-slider .slick-dots { margin-top: 14px !important; margin-bottom: 6px !important; }
+}
+
+/* Product grid: use single column on small phones so each card gets full width */
+@media (max-width: 520px) {
+  .product-grid {
+    grid-template-columns: 1fr !important;
+    gap: 18px !important;
+  }
+  .product-card { padding: 14px !important; }
+  .product-image { flex: 0 0 180px !important; height: 180px !important; }
+}
+
+/* Safety: ensure images do not overflow their containers */
+img { max-width: 100%; height: auto; }
+
+/* ===========================
+   Small polishing tweaks
+   =========================== */
+
+/* Keep body from allowing any horizontal overflow introduced by older CSS */
+html, body {
+  overflow-x: hidden !important;
+}
+
+/* Reduce giant paddings or inline styles that sometimes push content out */
+.headerwrapper, .header, nav, .navpart2 {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* High-specificity overrides only where needed (avoid !important otherwise) */
