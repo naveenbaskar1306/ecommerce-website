@@ -7,6 +7,8 @@ import Buynow from "../../components/Buttons/productbuy"
 import Addcart from "../../components/Buttons/productaddcart" 
 
 import { API_BASE } from "../../config/api";
+import makeImageUrl from '../../utils/makeImageUrl';
+
 
 export default function ProductDetail() {
   const { id } = useParams();

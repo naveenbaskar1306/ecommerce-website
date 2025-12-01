@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import Addcard from "../../components/Buttons/addcard";
 
 import { API_BASE } from "../../config/api";
+import makeImageUrl from '../../utils/makeImageUrl';
+
 
 const Products = () => {
   const [products, setProducts] = useState([]);
