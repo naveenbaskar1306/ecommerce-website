@@ -5,12 +5,7 @@ import { useCart } from "../../context/CartContext";
 import { toast } from "react-toastify";
 import Addcard from "../../components/Buttons/addcard";
 
-/**
- * Products page - fetches from /api/products and renders cards.
- * Supports: ?category=Name  and ?featured=true
- *
- * Paste this file into src/pages/products/index.js
- */
+const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -25,6 +20,10 @@ const Products = () => {
   const featuredParam = qs.get("featured") || "";
 
   useEffect(() => {
+    console.log("API_BASE =>", API_BASE);
+  }, []);
+
+  useEffect(() => {
     let cancelled = false;
 
     async function load() {
@@ -37,11 +36,16 @@ const Products = () => {
         if (featuredParam) params.set("featured", featuredParam);
         if (categoryParam) params.set("category", categoryParam);
 
-        const url = params.toString() ? `/api/products?${params.toString()}` : `/api/products`;
+        const url = params.toString()
+          ? `${API_BASE}/api/products?${params.toString()}`
+          : `${API_BASE}/api/products`;
 
-        // If you are not using proxy you may need to use 'http://localhost:5000/api/products...'
+        console.log("Fetching products from:", url);
+
         const res = await fetch(url);
-        if (!res.ok) throw new Error(`Server returned ${res.status}`);
+        if (!res.ok) {
+          throw new Error(`Server returned ${res.status}`);
+        }
         const data = await res.json();
         if (!cancelled) setProducts(Array.isArray(data) ? data : []);
       } catch (err) {
