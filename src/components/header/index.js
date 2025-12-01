@@ -12,7 +12,8 @@ import Navigation from './navigation';
 import { useCart } from "../../context/CartContext";
 
 import LoginModal from '../../components/Login/index';
-// NOTE: AdminLogin removed
+import '../../styles/mobile-fixes.css';
+
 
 const Header = () => {
   const navigate = useNavigate();
@@ -151,12 +152,19 @@ const Header = () => {
       <header className="header">
         <div className="container">
           <div className="row">
-            <div className="logowrapper d-flex align-item-center col-sm-2">
-              <Link to={'/'}><img src={Logo} alt='Logo' /></Link>
+
+            {/* Logo row - responsive */}
+            <div className="logowrapper col-12 col-sm-2 d-flex align-items-center justify-content-center">
+              <Link to={'/'} aria-label="Home">
+                <img src={Logo} alt='Logo' style={{ maxHeight: 86, width: 'auto' }} />
+              </Link>
             </div>
 
-            <div className='col-sm-10 d-flex align-items-center part2'>
-              <div className="header-left">
+            {/* Header middle: location select, search, actions */}
+            <div className='col-12 col-sm-10 d-flex align-items-center part2' style={{ gap: 12, flexWrap: 'wrap' }}>
+
+              {/* location select - will shrink on mobile */}
+              <div className="header-left" style={{ minWidth: 160, maxWidth: 420, flex: '0 1 32%' }}>
                 <CountryDropdown
                   value={selectedState}
                   onChange={setSelectedState}
@@ -164,24 +172,26 @@ const Header = () => {
                 />
               </div>
 
-              <SearchBox />
+              {/* Search box wrapper - fluid */}
+              <div className="search-box-wrapper" style={{ flex: '1 1 45%', minWidth: 180 }}>
+                <SearchBox />
+              </div>
 
-              <div className='part3 d-flex align-items-center ml-auto'>
+              {/* Right side actions (cart + profile) */}
+              <div className='part3 d-flex align-items-center' style={{ gap: 8, flex: '0 1 auto' }}>
 
-                {/* CART: added margin-right so it doesn't touch profile */}
                 <button
                   type="button"
                   className="circle cart-button"
                   onClick={goToCart}
                   aria-label="Open cart"
-                  style={{ marginRight: 12,marginLeft: 40  }}
+                  style={{ marginRight: 8 }}
                 >
                   <FaCartShopping />
                   {totalCount > 0 && <span className="cart-badge">{totalCount}</span>}
                 </button>
 
-                {/* Profile / Login area */}
-                <div ref={profileRef} style={{ position: 'relative', marginLeft: 0 }}>
+                <div ref={profileRef} style={{ position: 'relative' }}>
                   {!isLoggedIn ? (
                     <button
                       type="button"
@@ -193,19 +203,18 @@ const Header = () => {
                         background: '#f3f4f7',
                         border: 'none',
                         cursor: 'pointer',
-                        fontSize: 22,
-                        marginLeft: 8
+                        fontSize: 18,
+                        padding: '8px 10px',
+                        borderRadius: 8
                       }}
                     >
-                      {/* simple icon when logged out */}
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                         <path d="M12 12c2.7 0 4.9-2.2 4.9-4.9S14.7 2.2 12 2.2 7.1 4.4 7.1 7.1 9.3 12 12 12z" fill="#333"/>
                         <path d="M4 20.4c0-3.3 4.8-5.3 8-5.3s8 2 8 5.3v.6H4v-.6z" fill="#333"/>
                       </svg>
                     </button>
                   ) : (
                     <div style={{ display: 'inline-flex', alignItems: 'center' }}>
-                      {/* Avatar button (initials) */}
                       <button
                         className="profile-button"
                         onClick={(e) => {
@@ -217,11 +226,10 @@ const Header = () => {
                           alignItems: 'center',
                           gap: 8,
                           padding: '6px 10px',
-                          borderRadius: 6,
+                          borderRadius: 8,
                           border: '1px solid #ddd',
                           background: '#fff',
-                          cursor: 'pointer',
-                          marginLeft: 0
+                          cursor: 'pointer'
                         }}
                         aria-haspopup="true"
                         aria-expanded={showProfileMenu}
@@ -237,7 +245,6 @@ const Header = () => {
                             justifyContent: 'center',
                             color: '#fff',
                             fontWeight: 600,
-                            marginRight: 6,
                             background: stringToColor(displayName)
                           }}
                         >
@@ -246,8 +253,11 @@ const Header = () => {
                         <span style={{ marginLeft: 0, fontSize: 14 }}>{displayName}</span>
                       </button>
 
+                      {/* profile dropdown: positioned via computed dropdownStyle */}
                       {showProfileMenu && (
                         <div
+                          role="menu"
+                          aria-label="Profile menu"
                           style={{
                             position: 'fixed',
                             top: dropdownStyle.top,
@@ -275,7 +285,7 @@ const Header = () => {
                           >
                             Profile
                           </button>
-                        
+
                           <div style={{ height: 1, background: '#f2f2f2' }} />
                           <button
                             onClick={handleLogout}
@@ -297,20 +307,18 @@ const Header = () => {
                     </div>
                   )}
                 </div>
-
-                {/* Admin icon REMOVED */}
               </div>
             </div>
           </div>
         </div>
       </header>
 
+      {/* Navigation component (keeps your original behavior) */}
       <Navigation />
 
       {/* customer login modal */}
       {showLogin && <LoginModal onClose={closeLogin} onSuccess={onLoginSuccess} />}
 
-      {/* Admin login removed - if you want it elsewhere we can add it */}
     </div>
   );
 };

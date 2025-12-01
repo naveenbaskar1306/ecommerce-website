@@ -1,0 +1,337 @@
+/* nav-mobile-fixes.css
+   Focused mobile fix: ensure top navigation shows on small screens.
+   Append or add to your styles and import it in App.js.
+*/
+
+/* General nav container rules - safe defaults */
+.navpart2,
+.navpart2 .list,
+.navpart2 .list-inline {
+  box-sizing: border-box;
+}
+
+/* Make nav items visible and allow wrapping on tablets/smaller */
+@media (max-width: 992px) {
+  /* ensure nav column takes full width */
+  .navpart2 {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 0.25rem 0;
+  }
+
+  /* display inline list as flexible, wrap lines */
+  .navpart2 .list,
+  .navpart2 ul.list-inline,
+  .navpart2 ul {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: center;
+    gap: 0.25rem 0.6rem;
+  }
+
+  .navpart2 .list-inline-item {
+    display: inline-flex !important;
+    align-items: center;
+    list-style: none;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .navpart2 .list-inline-item a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.95rem;
+    text-decoration: none;
+    color: inherit;
+    white-space: nowrap;
+    border-radius: 6px;
+  }
+}
+
+/* On very small phones: make nav horizontally scrollable (no clipping) */
+@media (max-width: 420px) {
+  .navpart2 {
+    /* allow horizontal scrolling */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    padding-bottom: 0.35rem;
+  }
+
+  .navpart2 .list,
+  .navpart2 ul.list-inline {
+    display: flex !important;
+    flex-wrap: nowrap !important; /* horizontal scroll instead of wrap for tiny screens */
+    gap: 0.5rem;
+    min-width: 100%;
+  }
+
+  .navpart2 .list-inline-item {
+    min-width: max-content;
+    margin-right: .6rem;
+  }
+
+  .navpart2 .list-inline-item a {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.92rem;
+  }
+
+  /* shrink any overly large icon/button sizes in the nav */
+  .navpart2 .icon,
+  .navpart2 .nav-icon,
+  .navpart2 button {
+    min-width: auto;
+    padding: 0.25rem;
+  }
+}
+
+/* Optional: ensure category button doesn't push nav off-screen */
+@media (max-width: 768px) {
+  .catwrapper,
+  .allCatTab {
+    flex-shrink: 0;
+    margin-right: 0.5rem;
+    white-space: nowrap;
+  }
+
+  .allCatTab {
+    padding: 0.45rem 0.8rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* Tiny safety rule: override any inline huge padding on mobile that might push the nav */
+@media (max-width: 420px) {
+  .headerwrapper,
+  .navpart2,
+  .home-page[style] {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
+/* ----------------- Mobile nav friendly layout (single-file patch) ----------------- */
+
+/* Target the header nav area used in your project.
+   Adjust selectors if your markup uses different class names. */
+@media (max-width: 768px) {
+  /* Ensure the nav container is visible and full width */
+  nav, .navpart2, .part3, .nav-wrapper {
+    display: block !important;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  /* Make the nav list a horizontal, wrapping flex row */
+  nav .navpart2 ul,
+  .navpart2 ul,
+  nav ul.list-inline,
+  .nav-list {
+    display: flex !important;
+    flex-wrap: wrap !important;        /* allow rows when needed */
+    justify-content: center !important;
+    gap: 8px 10px !important;           /* vertical | horizontal gap */
+    padding: 8px 10px !important;
+    margin: 6px auto !important;
+    list-style: none !important;
+    width: 100% !important;
+  }
+
+  /* Each nav item: make it a nice pill with good tap size */
+  nav .navpart2 ul li,
+  .navpart2 ul li,
+  nav ul.list-inline li {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  nav .navpart2 ul li a,
+  .navpart2 ul li a,
+  nav ul.list-inline li a {
+    display: inline-block !important;
+    padding: 7px 12px !important;      /* good tap target */
+    font-size: 13px !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+    color: #111 !important;
+    background: #f6f6f6 !important;    /* subtle pill */
+    border-radius: 18px !important;
+    border: 1px solid rgba(0,0,0,0.06) !important;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.02) inset;
+    white-space: nowrap !important;    /* avoids breaking inside link text */
+  }
+
+  /* Make icons (if present) align nicely with text */
+  nav .navpart2 ul li a i,
+  .navpart2 ul li a i,
+  nav ul.list-inline li a i {
+    margin-right: 6px;
+    vertical-align: middle;
+    font-size: 14px;
+  }
+
+  /* If header is crowded, allow horizontal scroll for nav row */
+  nav .navpart2,
+  .navpart2 {
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px !important;
+  }
+
+  /* Hide default list bullets / inline spacing issues */
+  nav .navpart2 ul li::marker { content: none; }
+
+  /* small UI niceties: center and add slight margin under header */
+  .headerwrapper, header.header {
+    padding-bottom: 6px !important;
+  }
+}
+
+/* Extra tuning for very narrow phones */
+@media (max-width: 420px) {
+  nav .navpart2 ul,
+  .navpart2 ul {
+    gap: 6px !important;
+  }
+
+  nav .navpart2 ul li a {
+    padding: 6px 10px !important;
+    font-size: 12px !important;
+    border-radius: 16px !important;
+  }
+}
+/* ---------- Mobile header icons (cart + user) fix ---------- */
+/* Put this at the end of your mobile CSS so it overrides previous rules */
+
+@media (max-width: 768px) {
+  /* Ensure header sections are stacked in a predictable order */
+  .header .logowrapper,
+  .header .header-left,
+  .header .search-box-wrapper,
+  .header .part3,
+  .header .part2 {
+    box-sizing: border-box;
+  }
+
+  /* Make the search and icons area a single flex row so icons sit inline */
+  .header .search-box-wrapper,
+  .header .part3,
+  .header .part2,
+  .header .nav-icons {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+  }
+
+  /* Place search first, icons after it (tweak order if your DOM order differs) */
+  .header .search-box-wrapper { order: 1; padding-right: 8px; }
+  .header .part3, 
+  .header .nav-icons { order: 2; justify-content: flex-end; }
+
+  /* Generic selectors for cart / user buttons (covers common classnames & buttons) */
+  .header button.cart,
+  .header .cart-btn,
+  .header .cart-icon,
+  button[data-role="cart"],
+  button[aria-label*="cart"],
+  .header a.cart,
+  .header .cart {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 44px !important;
+    height: 44px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(0,0,0,0.06) !important;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06) !important;
+    color: #111 !important;
+    text-decoration: none !important;
+    margin-left: 8px !important;
+    flex: 0 0 44px !important;
+    z-index: 30 !important;
+  }
+
+  .header button.user,
+  .header .user-btn,
+  .header .user-icon,
+  button[aria-label*="user"],
+  .header a.user,
+  .header .profile {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 44px !important;
+    height: 44px !important;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    background: #ffffff !important;
+    border: 1px solid rgba(0,0,0,0.06) !important;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06) !important;
+    color: #111 !important;
+    margin-left: 8px !important;
+    flex: 0 0 44px !important;
+    z-index: 30 !important;
+  }
+
+  /* Make sure SVGs / icons scale nicely inside circular buttons */
+  .header button.cart svg,
+  .header button.user svg,
+  .header .cart-icon svg,
+  .header .user-icon svg,
+  .header .cart svg,
+  .header .user svg {
+    width: 20px !important;
+    height: 20px !important;
+    display: block;
+  }
+
+  /* If icons are currently stacked vertically, force horizontal layout */
+  .header .part3 > * {
+    display: inline-flex !important;
+    vertical-align: middle !important;
+  }
+
+  /* If the icons are absolutely positioned somewhere off, pull into normal flow */
+  .header .cart-btn,
+  .header .user-btn,
+  .header .cart-icon,
+  .header .user-icon {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    left: auto !important;
+    transform: none !important;
+  }
+
+  /* Provide extra spacing under header on small screens */
+  .headerwrapper, .header {
+    padding-bottom: 8px !important;
+  }
+
+  /* If the header area has overflow hidden on body, allow icons to be visible */
+  body {
+    overflow-x: hidden;
+  }
+}
+
+/* Very small devices: slightly reduce icon size to preserve space */
+@media (max-width: 420px) {
+  .header button.cart,
+  .header button.user,
+  .header .cart-btn,
+  .header .user-btn,
+  .header .cart-icon,
+  .header .user-icon {
+    width: 40px !important;
+    height: 40px !important;
+  }
+  .header button.cart svg,
+  .header button.user svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+}
