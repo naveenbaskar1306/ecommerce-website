@@ -40,6 +40,7 @@ import ProfilePage from "./pages/Profile/index";
 
 
 const mycontext = createContext();
+const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 function App() {
   const [countryList, setCountryList] = useState([]);
@@ -65,19 +66,33 @@ function App() {
 }, []);
 
  
-  const getcountry = async () => {
+ const getcountry = async () => {
+  try {
+    // 1) Try backend first
+    const res = await axios.get(`${API_BASE}/api/states`);
+
+    const indianStates = res.data.filter(
+      (item) => item.country_code === "IN"
+    );
+
+    const formatted = indianStates.map((s) => ({
+      id: s.id,
+      name: s.name,
+      state_code: s.state_code,
+    }));
+
+    setCountryList(formatted);
+    console.log("✅ Loaded Indian States from backend:", formatted.length);
+  } catch (error) {
+    console.error("❌ Failed to fetch states from backend:", error);
+
+    // 2) fallback to local file (put states.json in /public folder)
     try {
-      const url =
-        "https://raw.githubusercontent.com/dr5hn/countries-states-cities-database/master/states.json";
-
-      const res = await axios.get(url);
-
-      
-      const indianStates = res.data.filter(
+      const fallback = await axios.get("/states.json");
+      const indianStates = fallback.data.filter(
         (item) => item.country_code === "IN"
       );
 
-     
       const formatted = indianStates.map((s) => ({
         id: s.id,
         name: s.name,
@@ -85,11 +100,13 @@ function App() {
       }));
 
       setCountryList(formatted);
-      console.log("✅ Loaded Indian States:", formatted.length);
-    } catch (error) {
-      console.error("❌ Failed to fetch Indian states:", error);
+      console.log("⚠️ Loaded fallback Indian States:", formatted.length);
+    } catch (e) {
+      console.error("❌ Failed fallback states too:", e);
+      setCountryList([]);
     }
-  };
+  }
+};
 
   const OpenLoginModal = () => {
     setisModalOpen(true);
