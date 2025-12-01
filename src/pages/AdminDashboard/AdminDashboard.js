@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { API_BASE } from "../../config/api";
+
 
 export default function AdminDashboard() {
   const [summary, setSummary] = useState(null);

@@ -5,7 +5,7 @@ import { useCart } from "../../context/CartContext";
 import { toast } from "react-toastify";
 import Addcard from "../../components/Buttons/addcard";
 
-const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+import { API_BASE } from "../../config/api";
 
 const Products = () => {
   const [products, setProducts] = useState([]);

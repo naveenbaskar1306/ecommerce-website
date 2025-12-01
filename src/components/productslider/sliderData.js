@@ -1,11 +1,12 @@
 // src/components/sliderData.js
 import React, { useEffect, useState } from "react";
 
+// ✅ Centralized API import
+import { API_BASE } from "../../config/api";
+
 export default function SliderData() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000";
 
   useEffect(() => {
     async function fetchFeatured() {
@@ -21,7 +22,7 @@ export default function SliderData() {
       }
     }
     fetchFeatured();
-  }, [API_BASE]);
+  }, []);
 
   const makeImageUrl = (path) => {
     if (!path) return "/placeholder.png";

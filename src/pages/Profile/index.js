@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
   If your backend uses slightly different paths, update the URLs below.
 */
 
-const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:5000";
+import { API_BASE } from "../../config/api";
 
 // small helpers
 const rupee = (v) =>

@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import FeaturedSlider from "../../components/productslider/FeaturedSlider";
 import Popup from "../../components/Buttons/aipopup";
 
-const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:5000";
+import { API_BASE } from "../../config/api";
 
 const PLACEHOLDER_IMAGE =
   "data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D'400'%20height%3D'300'%20xmlns%3D'http%3A//www.w3.org/2000/svg'%3E%3Crect%20fill%3D'%23f3f4f6'%20width%3D'100%25'%20height%3D'100%25'/%3E%3Ctext%20x%3D'50%25'%20y%3D'50%25'%20dominant-baseline%3D'middle'%20text-anchor%3D'middle'%20fill%3D'%23999'%20font-family%3D'Arial'%20font-size%3D'18'%3ENo%20Image%3C/text%3E%3C/svg%3E";

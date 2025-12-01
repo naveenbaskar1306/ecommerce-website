@@ -1,8 +1,9 @@
-// src/pages/Register/Register.jsx
+// src/components/Register/Register.js OR src/pages/Register/Register.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const API = process.env.REACT_APP_API_URL || 'http://localhost:5000';
+// ✅ Centralized API import
+import { API_BASE } from "../../config/api";
 
 export default function Register() {
   const navigate = useNavigate();
@@ -23,7 +24,6 @@ export default function Register() {
   function validate() {
     if (!form.name.trim()) return 'Please enter your name.';
     if (!form.email.trim()) return 'Please enter your email.';
-    // basic email check
     if (!/^\S+@\S+\.\S+$/.test(form.email)) return 'Please enter a valid email.';
     if (form.password.length < 6) return 'Password must be at least 6 characters.';
     if (form.password !== form.confirm) return "Passwords don't match.";
@@ -34,12 +34,16 @@ export default function Register() {
     e.preventDefault();
     setError('');
     setSuccessMsg('');
+
     const v = validate();
-    if (v) { setError(v); return; }
+    if (v) { 
+      setError(v); 
+      return; 
+    }
 
     setLoading(true);
     try {
-      const res = await fetch(`${API}/api/auth/register`, {
+      const res = await fetch(`${API_BASE}/api/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -48,14 +52,19 @@ export default function Register() {
           password: form.password
         })
       });
+
       const data = await res.json();
+
       if (!res.ok) {
         setError(data.message || 'Registration failed.');
         setLoading(false);
         return;
       }
+
       setSuccessMsg('Account created successfully. Redirecting to login...');
+
       setTimeout(() => navigate('/'), 1400);
+
     } catch (err) {
       console.error(err);
       setError('Network error. Please try again.');
