@@ -16,12 +16,23 @@ app.use(cookieParser());
 // CORS: allow your frontend origin (default http://localhost:3000)
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://nichieecommerce.netlify.app/',
+  'https://nichieecommerce.netlify.app'
 ];
 app.use(cors({
-  origin: allowedOrigins,
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS: ' + origin));
+    }
+  },
+  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type','Authorization'],
   credentials: true,
 }));
+// Preflight handler
+app.options('*', cors());
 
 
 
