@@ -1,206 +1,132 @@
 // backend/server.js
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-const asyncHandler = require('express-async-handler');
 const path = require('path');
 
 const app = express();
 
-// -------------------- Middleware --------------------
+/* -------------------- Config -------------------- */
+const PORT = process.env.PORT || 5000;
+const MONGODB_URI = process.env.MONGODB_URI || '';
+const FRONTEND_URL = (process.env.FRONTEND_URL || process.env.CLIENT_ORIGIN || '').trim();
+
+/* -------------------- Middleware -------------------- */
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// CORS: allow your frontend origin (default http://localhost:3000)
+/* -------------------- Safe CORS middleware (no wildcard routes) -------------------- */
 const allowedOrigins = [
   'http://localhost:3000',
   'https://nichieecommerce.netlify.app'
 ];
-app.use(cors({
-  origin: function(origin, callback) {
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS: ' + origin));
-    }
-  },
-  methods: ['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization'],
-  credentials: true,
-}));
-// Preflight handler
-app.options('*', cors());
 
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, Accept, X-Requested-With');
 
+  // Immediately handle preflight without relying on app.options with a wildcard
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
-
-
-// Serve uploaded files (images) from /uploads
+/* -------------------- Static files -------------------- */
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// -------------------- Routes (load carefully) --------------------
-// We'll attempt to load multiple possible route files. Missing files won't crash the server.
-let productsRouter, blogsRouter, statesRouter, authRouter, ordersRouter, adminRoutes, artisanRoutes, artisanAuthRoutes, contactRoutes;
+/* -------------------- Try to load route modules if present -------------------- */
+let productsRouter, blogsRouter, statesRouter, authRouter, ordersRouter, adminRoutes, artisanRoutes, artisanAuthRoutes, contactRoutes, usersRouter;
 
+try { adminRoutes = require('./routes/admin'); } catch (e) { /* skip if missing */ }
+try { productsRouter = require('./routes/products'); } catch (e) { /* skip if missing */ }
+try { blogsRouter = require('./routes/blogs'); } catch (e) { /* skip if missing */ }
+try { statesRouter = require('./routes/states'); } catch (e) { /* skip if missing */ }
+try { authRouter = require('./routes/auth'); } catch (e) { /* skip if missing */ }
+try { ordersRouter = require('./routes/orders'); } catch (e) { /* skip if missing */ }
+try { artisanRoutes = require('./routes/artisan'); } catch (e) { /* skip if missing */ }
+try { artisanAuthRoutes = require('./routes/artisanAuth'); } catch (e) { /* skip if missing */ }
+try { contactRoutes = require('./routes/Contact'); } catch (e) { /* skip if missing */ }
+try { usersRouter = require('./routes/users'); } catch (e) { /* skip if missing */ }
+
+/* -------------------- Mount routers if present -------------------- */
+if (adminRoutes) { app.use('/api/admin', adminRoutes); console.log('Mounted /api/admin'); }
+if (artisanAuthRoutes) { app.use('/api/auth/artisan', artisanAuthRoutes); console.log('Mounted /api/auth/artisan'); }
+if (artisanRoutes) { app.use('/api/artisan', artisanRoutes); console.log('Mounted /api/artisan'); }
+if (productsRouter) { app.use('/api/products', productsRouter); console.log('Mounted /api/products'); }
+if (blogsRouter) { app.use('/api/blogs', blogsRouter); console.log('Mounted /api/blogs'); }
+if (statesRouter) { app.use('/api/states', statesRouter); console.log('Mounted /api/states'); }
+if (authRouter) { app.use('/api/auth', authRouter); console.log('Mounted /api/auth'); }
+if (ordersRouter) { app.use('/api/orders', ordersRouter); console.log('Mounted /api/orders'); }
+if (contactRoutes) { app.use('/api/contact', contactRoutes); console.log('Mounted /api/contact'); }
+if (usersRouter) { app.use('/api/users', usersRouter); console.log('Mounted /api/users'); }
+
+/* If there's an index router at ./routes/index.js try to mount it under /api */
 try {
-  adminRoutes = require('./routes/admin');
-  console.log('routes/admin.js required successfully');
+  const indexRouter = require('./routes');
+  if (indexRouter) {
+    app.use('/api', indexRouter);
+    console.log('Mounted /api (index router)');
+  }
 } catch (e) {
-  console.warn('routes/admin.js not found or failed to load:', e.message);
+  // fine if not present
 }
 
-// then later, when mounting routes, keep a clear check and log the result
-if (adminRoutes && (typeof adminRoutes === 'function' || adminRoutes.stack || adminRoutes.router)) {
-  console.log('Mounting admin routes at /api/admin');
-  app.use('/api/admin', adminRoutes);
-} else {
-  console.warn('Admin routes not mounted (adminRoutes falsy or not a router).');
-}
-
-try { productsRouter = require('./routes/products'); } catch (e) { console.warn('routes/products.js not found or failed to load:', e.message); }
-try { blogsRouter = require('./routes/blogs'); } catch (e) { console.warn('routes/blogs.js not found or failed to load:', e.message); }
-try { statesRouter = require('./routes/states'); } catch (e) { console.warn('routes/states.js not found or failed to load:', e.message); }
-try { authRouter = require('./routes/auth'); } catch (e) { console.warn('routes/auth.js not found or failed to load:', e.message); }
-try { ordersRouter = require('./routes/orders'); } catch (e) { console.warn('routes/orders.js not found or failed to load:', e.message); }
-try { adminRoutes = require('./routes/admin'); } catch (e) { console.warn('routes/admin.js not found or failed to load:', e.message); }
-try { artisanRoutes = require('./routes/artisan'); } catch (e) { console.warn('routes/artisan.js not found or failed to load:', e.message); }
-try { artisanAuthRoutes = require('./routes/artisanAuth'); } catch (e) { console.warn('routes/artisanAuth.js not found or failed to load:', e.message); }
-try { contactRoutes = require('./routes/Contact'); } catch (e) { console.warn('routes/Contact.js not found or failed to load:', e.message); }
-let usersRouter;
-try {
-  usersRouter = require('./routes/users');
-} catch (e) {
-  console.warn('routes/users.js not found or failed to load:', e.message);
-}
-
-
-
-// --- Mount routes ---
-// Use a simple truthy check to avoid false negatives for valid routers
-if (adminRoutes) {
-  console.log('Mounting admin routes at /api/admin');
-  app.use('/api/admin', adminRoutes);
-} else {
-  console.warn('Admin routes not mounted (routes/admin.js missing or failed to export router).');
-}
-
-if (artisanAuthRoutes) {
-  console.log('Mounting artisan auth routes at /api/auth/artisan');
-  app.use('/api/auth/artisan', artisanAuthRoutes);
-}
-
-if (artisanRoutes) {
-  console.log('Mounting artisan routes at /api/artisan');
-  app.use('/api/artisan', artisanRoutes);
-}
-
-if (productsRouter) {
-  console.log('Mounting products routes at /api/products');
-  app.use('/api/products', productsRouter);
-}
-if (blogsRouter) {
-  console.log('Mounting blogs routes at /api/blogs');
-  app.use('/api/blogs', blogsRouter);
-}
-if (statesRouter) {
-  console.log('Mounting states routes at /api/states');
-  app.use('/api/states', statesRouter);
-}
-if (authRouter) {
-  console.log('Mounting auth routes at /api/auth');
-  app.use('/api/auth', authRouter);
-}
-if (ordersRouter) {
-  console.log('Mounting orders routes at /api/orders');
-  app.use('/api/orders', ordersRouter);
-}
-if (contactRoutes) {
-  console.log('Mounting contact routes at /api/contact');
-  app.use('/api/contact', contactRoutes);
-}
-if (usersRouter) {
-  console.log('Mounting users routes at /api/users');
-  app.use('/api/users', usersRouter);
-}
-
-// Basic health check
+/* -------------------- Health & fallback endpoints -------------------- */
 app.get('/', (req, res) => res.send('API is running'));
 
-// ---------- Example checkout endpoint (optional) ----------
-let Order;
-try { Order = require('./models/Order'); } catch (e) { console.warn('Order model not found at ./models/Order — checkout will return 500 until created.'); }
-
-app.post('/api/checkout', asyncHandler(async (req, res) => {
-  if (!Order) {
-    return res.status(500).json({ message: 'Order model not found on server. Please add backend/models/Order.js' });
+/* -------------------- API 404 handler (avoid wildcard route strings) -------------------- */
+// Instead of app.use('/api/*', ...) which can crash with some path-to-regexp versions,
+// check the path prefix manually and return a JSON 404 for any unmatched /api/ request.
+app.use((req, res, next) => {
+  if (req.path && req.path.startsWith('/api/')) {
+    return res.status(404).json({ message: 'API route not found' });
   }
+  next();
+});
 
-  const {
-    orderItems,
-    shippingAddress = {},
-    paymentMethod = 'manual',
-    itemsPrice,
-    shippingPrice = 0,
-    taxPrice = 0,
-    totalPrice,
-    userId,
-  } = req.body;
-
-  if (!orderItems || !Array.isArray(orderItems) || orderItems.length === 0) {
-    return res.status(400).json({ message: 'orderItems is required and should be a non-empty array.' });
-  }
-  if (typeof totalPrice === 'undefined') {
-    return res.status(400).json({ message: 'totalPrice is required.' });
-  }
-
-  const created = await Order.create({
-    orderItems,
-    shippingAddress,
-    paymentMethod,
-    itemsPrice: itemsPrice ?? orderItems.reduce((s, it) => s + ((it.price || 0) * (it.qty || 1)), 0),
-    shippingPrice,
-    taxPrice,
-    totalPrice,
-    user: userId || null,
-    isPaid: false,
-    isDelivered: false,
-  });
-
-  res.status(201).json({ message: 'Order created', order: created });
-}));
-
-
-// 404 for unknown routes
+/* Generic 404 for other routes */
 app.use((req, res) => {
   res.status(404).json({ message: 'Route not found' });
 });
 
-// Error handler
+/* Error handler */
 app.use((err, req, res, next) => {
-  console.error('Unhandled error:', err);
-  res.status(err.status || 500).json({
-    message: err.message || 'Internal Server Error',
-    stack: process.env.NODE_ENV === 'production' ? undefined : err.stack,
+  console.error('Unhandled error:', err && (err.stack || err.message || err));
+  res.status(err && err.status ? err.status : 500).json({
+    message: err && err.message ? err.message : 'Internal Server Error',
+    stack: process.env.NODE_ENV === 'production' ? undefined : err && err.stack
   });
 });
 
-// -------------------- Start Mongo + Server --------------------
-const PORT = process.env.PORT || 5000;
-const MONGODB_URI = process.env.MONGODB_URI;
-if (!MONGODB_URI) {
-  console.error('MONGODB_URI not set in .env — please set your connection string as MONGODB_URI');
-  process.exit(1);
+/* -------------------- Start server (connect DB if provided) -------------------- */
+function startServer() {
+  app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+    console.log('FRONTEND_URL =', FRONTEND_URL || 'not set');
+  });
 }
 
-mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => {
-    console.log('MongoDB connected successfully');
-    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-  })
-  .catch((err) => {
-    console.error('MongoDB connection error:', err);
-    process.exit(1);
-  });
+if (!MONGODB_URI) {
+  console.warn('MONGODB_URI not set — starting server without DB (useful for debugging).');
+  startServer();
+} else {
+  mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+      console.log('MongoDB connected');
+      startServer();
+    })
+    .catch((err) => {
+      console.error('MongoDB connection failed — starting server anyway:', err && err.message ? err.message : err);
+      startServer();
+    });
+}
+
+module.exports = app;
