@@ -94,13 +94,18 @@ const Products = () => {
           // support multiple possible backend shape
           const id = product._id || product.id || product._key;
           const title = product.title || product.name || "Untitled";
-          const image = product.image || product.imageUrl || product.img || "";
+          const makeUrl = (src) => {
+  if (!src) return "/placeholder-product.png";
+  if (src.startsWith("http")) return src;
+  return `${API_BASE}${src.startsWith("/") ? src : `/uploads/${src}`}`;
+};
           const price = (product.price === 0 || product.price) ? product.price : product.amount;
           const category = product.category || product.cat || product.categoryName || "";
           const description = product.description || product.desc || "";
 
           // fallback placeholder
-          const imageSrc = image && typeof image === 'string' ? image : '/placeholder-product.png';
+         const image = product.image || product.imageUrl || product.img || "";
+const imageSrc = makeUrl(image);
 
           return (
             <article key={id || title} className="product-card" style={{
